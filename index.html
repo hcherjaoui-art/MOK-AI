@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MockAI | AI Interview Simulation Platform</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#landing" aria-label="MockAI home" data-nav="landing">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="presentation" focusable="false" class="brand-mark-icon">
+          <defs>
+            <linearGradient id="brandGradient" x1="10" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#8de7ff" />
+              <stop offset="55%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#7c3aed" />
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="52" height="52" rx="18" fill="url(#brandGradient)" />
+          <path d="M18 42V22l14 15 14-15v20" fill="none" stroke="#07111f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="47" cy="17" r="3.3" fill="#07111f" opacity="0.92" />
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>MockAI</strong>
+        <small>AI Interview Simulator</small>
+      </span>
+    </a>
+
+    <nav class="topnav" aria-label="Primary">
+      <button class="nav-link active" data-nav="landing">Home</button>
+      <button class="nav-link" data-nav="domains">Practice</button>
+      <button class="nav-link" data-nav="history">History</button>
+    </nav>
+  </header>
+
+  <main class="app-shell">
+    <section class="page page-active" id="landing" data-page="landing">
+      <div class="hero-copy reveal">
+        <span class="eyebrow">AI-powered interview simulator</span>
+        <h1>Practice interviews that feel like the real thing.</h1>
+        <p>
+          MockAI helps students rehearse job interviews across multiple domains with realistic questions,
+          instant pacing, and polished feedback screens designed for presentation-ready demos.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-nav="domains">Start Interview</button>
+          <button class="btn btn-secondary" data-nav="history">View History</button>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-card">
+            <strong>4</strong>
+            <span>Interview domains</span>
+          </div>
+          <div class="metric-card">
+            <strong>92%</strong>
+            <span>Average confidence lift</span>
+          </div>
+          <div class="metric-card">
+            <strong>AI</strong>
+            <span>Feedback-ready workflow</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel reveal delay-1">
+        <div class="panel-header">
+          <span class="panel-chip">Live demo preview</span>
+          <span class="pulse-dot">Simulated</span>
+        </div>
+
+        <div class="mock-screen">
+          <div class="mock-screen-top">
+            <div class="window-controls">
+              <span></span><span></span><span></span>
+            </div>
+            <p>Mock interview session</p>
+          </div>
+
+          <div class="mock-card">
+            <span class="mock-label">Question 01</span>
+            <h3>Tell me about a project where you solved a complex problem.</h3>
+            <div class="mock-answer">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="mock-score-row">
+            <div>
+              <span>Clarity</span>
+              <strong>8.6</strong>
+            </div>
+            <div>
+              <span>Depth</span>
+              <strong>8.2</strong>
+            </div>
+            <div>
+              <span>Confidence</span>
+              <strong>9.1</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="domains" data-page="domains">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Choose your practice track</span>
+        <h2>Select the interview domain you want to simulate.</h2>
+        <p>Each track includes a curated question set and an interview flow designed to resemble a modern hiring process.</p>
+      </div>
+
+      <div class="domain-grid reveal delay-1">
+        <button class="domain-card selected" data-domain="Software Development">
+          <span class="domain-icon"><> </span>
+          <strong>Software Development</strong>
+          <p>System design, coding habits, and engineering fundamentals.</p>
+        </button>
+        <button class="domain-card" data-domain="Cybersecurity">
+          <span class="domain-icon">⛨</span>
+          <strong>Cybersecurity</strong>
+          <p>Threat modeling, secure practices, and incident response.</p>
+        </button>
+        <button class="domain-card" data-domain="Data Science">
+          <span class="domain-icon">◫</span>
+          <strong>Data Science</strong>
+          <p>Analytics, modeling, and data-driven decision making.</p>
+        </button>
+        <button class="domain-card" data-domain="Networking">
+          <span class="domain-icon">◌</span>
+          <strong>Networking</strong>
+          <p>Protocols, architecture, and infrastructure troubleshooting.</p>
+        </button>
+      </div>
+
+      <div class="page-footer reveal delay-2">
+        <button class="btn btn-ghost" data-nav="landing">Back</button>
+        <button class="btn btn-primary" id="beginInterviewBtn">Begin Selected Interview</button>
+      </div>
+    </section>
+
+    <section class="page" id="interview" data-page="interview">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Mock interview session</span>
+        <h2 id="interviewDomainTitle">Software Development Interview</h2>
+        <p id="interviewProgressText">Question 1 of 5</p>
+      </div>
+
+      <div class="interview-layout reveal delay-1">
+        <aside class="interview-sidebar">
+          <div class="sidebar-block">
+            <span class="sidebar-label">Domain</span>
+            <strong id="domainTag">Software Development</strong>
+          </div>
+          <div class="sidebar-block">
+            <span class="sidebar-label">Question Progress</span>
+            <div class="progress-track"><div class="progress-fill" id="questionProgress"></div></div>
+          </div>
+          <div class="sidebar-block stacked-stats">
+            <div><span>Quality</span><strong>Mock AI</strong></div>
+            <div><span>Mode</span><strong>Live Simulation</strong></div>
+          </div>
+        </aside>
+
+        <article class="interview-card">
+          <div class="question-badge">AI Interview Question</div>
+          <h3 id="questionText">Loading question...</h3>
+          <p class="question-note">Answer naturally. This prototype simulates an AI session without backend calls.</p>
+
+          <label class="answer-label" for="answerInput">Your answer</label>
+          <textarea id="answerInput" placeholder="Type your response here..."></textarea>
+
+          <div class="interview-actions">
+            <button class="btn btn-secondary" data-nav="domains">Change Domain</button>
+            <button class="btn btn-primary" id="nextQuestionBtn">Next Question</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="results" data-page="results">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Interview complete</span>
+        <h2>Performance summary</h2>
+        <p>A presentation-ready result screen with mock analytics, strengths, and AI-style recommendations.</p>
+      </div>
+
+      <div class="results-grid reveal delay-1">
+        <div class="results-score card-glass">
+          <span class="section-label">Final Score</span>
+          <div class="score-circle">
+            <strong id="finalScore">87</strong>
+            <span>/ 100</span>
+          </div>
+          <p id="resultDomain">Software Development</p>
+        </div>
+
+        <div class="results-list card-glass">
+          <h3>Strengths</h3>
+          <ul id="strengthList"></ul>
+        </div>
+
+        <div class="results-list card-glass">
+          <h3>Weaknesses</h3>
+          <ul id="weaknessList"></ul>
+        </div>
+
+        <div class="results-list card-glass full-width">
+          <h3>AI Recommendations</h3>
+          <ul id="recommendationList"></ul>
+        </div>
+      </div>
+
+      <div class="page-footer reveal delay-2">
+        <button class="btn btn-secondary" data-nav="domains">Retry Interview</button>
+        <button class="btn btn-primary" data-nav="history">Open Dashboard</button>
+      </div>
+    </section>
+
+    <section class="page" id="history" data-page="history">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Student progress dashboard</span>
+        <h2>History dashboard</h2>
+        <p>Track previous interviews, scores, and progression metrics across practice sessions.</p>
+      </div>
+
+      <div class="dashboard-grid reveal delay-1">
+        <div class="dashboard-card card-glass">
+          <span class="section-label">Progress Statistics</span>
+          <div class="stats-grid" id="progressStats"></div>
+        </div>
+
+        <div class="dashboard-card card-glass full-width">
+          <span class="section-label">Previous Sessions</span>
+          <div class="session-list" id="sessionList"></div>
+        </div>
+      </div>
+
+      <div class="page-footer reveal delay-2">
+        <button class="btn btn-secondary" data-nav="landing">Home</button>
+        <button class="btn btn-primary" data-nav="domains">Start New Session</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-note">
+    <span>MockAI frontend prototype</span>
+    <span>Static demo for university presentation</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
