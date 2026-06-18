@@ -37,6 +37,7 @@
       <button class="nav-link active" data-nav="landing">Home</button>
       <button class="nav-link" data-nav="domains">Practice</button>
       <button class="nav-link" data-nav="history">History</button>
+      <button class="nav-link" id="signInBtn">Connexion</button>
     </nav>
   </header>
 
@@ -257,5 +258,40 @@
   </footer>
 
   <script src="script.js"></script>
+  <div class="modal" id="authModal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <div class="modal-header">
+        <h3 id="authTitle">Se connecter / S'inscrire</h3>
+        <button class="modal-close" id="authClose">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required />
+          <label>Mot de passe</label>
+          <input type="password" id="loginPassword" required />
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+            <button type="button" class="btn btn-secondary" id="showRegister">S'inscrire</button>
+          </div>
+        </form>
+
+        <form id="registerForm" class="auth-form" style="display:none;">
+          <label>Nom</label>
+          <input type="text" id="regName" required />
+          <label>Email</label>
+          <input type="email" id="regEmail" required />
+          <label>Mot de passe</label>
+          <input type="password" id="regPassword" required />
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Créer un compte</button>
+            <button type="button" class="btn btn-secondary" id="showLogin">Retour</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
