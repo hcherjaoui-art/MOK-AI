@@ -1,0 +1,16 @@
+Salut Ahmed,
+
+Je te transfère la partie frontend du projet MockAI.
+Ouvre le dossier `transfer/` dans VS Code et suis les instructions dans `README.md`.
+
+Points clés :
+- `INTEGRATION.md` contient le contrat d'API recommandé.
+- Lance `run-local.bat` (Windows) ou `run-local.sh` (Linux/Mac) pour démarrer un serveur local.
+- Contacte‑moi si tu veux que j'adapte le frontend aux noms de champs exacts de l'API.
+
+Commandes rapides (PowerShell) :
+cd "C:\Users\ADIL\Desktop\MOKAI-prjt\transfer"
+.\run-local.bat
+
+Merci,
+
