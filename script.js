@@ -166,6 +166,83 @@ registerForm && registerForm.addEventListener('submit', (e) => {
 
 setUserDisplay();
 
+// --- Simple auth UI / state (client-side mock) ---
+const signInBtn = document.getElementById('signInBtn');
+const authModal = document.getElementById('authModal');
+const authClose = document.getElementById('authClose');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
+
+function setUserDisplay() {
+  const user = JSON.parse(localStorage.getItem('mockai_user') || 'null');
+  if (user && user.name) {
+    signInBtn.textContent = user.name;
+    signInBtn.classList.add('active');
+  } else {
+    signInBtn.textContent = 'Connexion';
+    signInBtn.classList.remove('active');
+  }
+}
+
+function openAuth(showLoginForm = true) {
+  authModal.setAttribute('aria-hidden', 'false');
+  authModal.style.display = 'flex';
+  if (showLoginForm) {
+    loginForm.style.display = '';
+    registerForm.style.display = 'none';
+  } else {
+    loginForm.style.display = 'none';
+    registerForm.style.display = '';
+  }
+}
+
+function closeAuth() {
+  authModal.setAttribute('aria-hidden', 'true');
+  authModal.style.display = 'none';
+}
+
+signInBtn && signInBtn.addEventListener('click', () => {
+  const user = JSON.parse(localStorage.getItem('mockai_user') || 'null');
+  if (user && user.name) {
+    // clicking while signed in signs out
+    localStorage.removeItem('mockai_user');
+    setUserDisplay();
+    return;
+  }
+  openAuth(true);
+});
+
+authClose && authClose.addEventListener('click', closeAuth);
+authModal && authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
+showRegister && showRegister.addEventListener('click', () => openAuth(false));
+showLogin && showLogin.addEventListener('click', () => openAuth(true));
+
+loginForm && loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pwd = document.getElementById('loginPassword').value;
+  // Mock authentication: accept any credentials and store a simple user object
+  const user = { name: email.split('@')[0], email };
+  localStorage.setItem('mockai_user', JSON.stringify(user));
+  setUserDisplay();
+  closeAuth();
+});
+
+registerForm && registerForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pwd = document.getElementById('regPassword').value;
+  const user = { name: name || email.split('@')[0], email };
+  localStorage.setItem('mockai_user', JSON.stringify(user));
+  setUserDisplay();
+  closeAuth();
+});
+
+setUserDisplay();
+
 function showPage(pageId) {
   pages.forEach((page) => {
     page.classList.toggle('page-active', page.id === pageId);
