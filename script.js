@@ -97,11 +97,13 @@ const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const showRegister = document.getElementById('showRegister');
 const showLogin = document.getElementById('showLogin');
+const API_BASE = (window.__API_BASE__ || window.location.origin).replace(/\/$/, '');
 
 function setUserDisplay() {
-  const user = JSON.parse(localStorage.getItem('mockai_user') || 'null');
-  if (user && user.name) {
-    signInBtn.textContent = user.name;
+  const auth = JSON.parse(localStorage.getItem('mockai_auth') || 'null');
+  const user = auth && auth.user ? auth.user : null;
+  if (user && user.username) {
+    signInBtn.textContent = user.username;
     signInBtn.classList.add('active');
   } else {
     signInBtn.textContent = 'Connexion';
@@ -126,11 +128,12 @@ function closeAuth() {
   authModal.style.display = 'none';
 }
 
+
 signInBtn && signInBtn.addEventListener('click', () => {
-  const user = JSON.parse(localStorage.getItem('mockai_user') || 'null');
-  if (user && user.name) {
-    // clicking while signed in signs out
-    localStorage.removeItem('mockai_user');
+  const auth = JSON.parse(localStorage.getItem('mockai_auth') || 'null');
+  if (auth && auth.token) {
+    // sign out
+    localStorage.removeItem('mockai_auth');
     setUserDisplay();
     return;
   }
@@ -142,26 +145,56 @@ authModal && authModal.addEventListener('click', (e) => { if (e.target === authM
 showRegister && showRegister.addEventListener('click', () => openAuth(false));
 showLogin && showLogin.addEventListener('click', () => openAuth(true));
 
-loginForm && loginForm.addEventListener('submit', (e) => {
+async function apiPost(path, body, opts = {}) {
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+  const res = await fetch(API_BASE + path, { method: 'POST', headers, body: JSON.stringify(body) });
+  if (!res.ok) throw new Error('Request failed: ' + res.status);
+  return res.json();
+}
+
+loginForm && loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   const pwd = document.getElementById('loginPassword').value;
-  // Mock authentication: accept any credentials and store a simple user object
-  const user = { name: email.split('@')[0], email };
-  localStorage.setItem('mockai_user', JSON.stringify(user));
-  setUserDisplay();
-  closeAuth();
+  try {
+    const json = await apiPost('/auth/login', { email, password: pwd });
+    if (json && json.token) {
+      localStorage.setItem('mockai_auth', JSON.stringify(json));
+      setUserDisplay();
+      closeAuth();
+    }
+  } catch (err) {
+    console.warn('login failed', err);
+    // Fallback to local mock auth when server is unreachable
+    const fallback = { token: 'local-' + Date.now(), user: { username: email.split('@')[0] || 'guest', email } };
+    localStorage.setItem('mockai_auth', JSON.stringify(fallback));
+    setUserDisplay();
+    closeAuth();
+    // notify user
+    alert('Connexion en mode offline (local).');
+  }
 });
 
-registerForm && registerForm.addEventListener('submit', (e) => {
+registerForm && registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pwd = document.getElementById('regPassword').value;
-  const user = { name: name || email.split('@')[0], email };
-  localStorage.setItem('mockai_user', JSON.stringify(user));
-  setUserDisplay();
-  closeAuth();
+  try {
+    const json = await apiPost('/auth/register', { username: name, email, password: pwd });
+    if (json && json.token) {
+      localStorage.setItem('mockai_auth', JSON.stringify(json));
+      setUserDisplay();
+      closeAuth();
+    }
+  } catch (err) {
+    console.warn('register failed', err);
+    const fallback = { token: 'local-' + Date.now(), user: { username: name || email.split('@')[0] || 'guest', email } };
+    localStorage.setItem('mockai_auth', JSON.stringify(fallback));
+    setUserDisplay();
+    closeAuth();
+    alert('Inscription en mode offline (local).');
+  }
 });
 
 setUserDisplay();
